@@ -1,0 +1,69 @@
+.tags {
+  margin-bottom: 1rem;
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  &__container {
+    position: relative;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+
+    &--collapsed {
+      max-height: 180px;
+      overflow: hidden;
+    }
+  }
+
+  &__tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid;
+    cursor: pointer;
+    background: none;
+
+    &--selected {
+      background-color: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    &:not(&--selected) {
+      color: #d1d5db;
+      border-color: #4b5563;
+      &:hover {
+        border-color: #3b82f6;
+      }
+    }
+  }
+
+  &__fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background: linear-gradient(to top, #111827, transparent);
+  }
+
+  &__toggle {
+    margin-top: 0.5rem;
+    background: none;
+    border: none;
+    color: #60a5fa;
+    cursor: pointer;
+
+    &:hover {
+      color: #93c5fd;
+    }
+  }
+}

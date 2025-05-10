@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { objectsAtom, tagsAtom } from '../atoms';
-import { FaYoutube, FaLink, FaColumns } from 'react-icons/fa';
+import { FaYoutube, FaLink } from 'react-icons/fa';
 import { useCSVImport } from '../hooks/useCSVImport';
 import { useHTMLImport } from '../hooks/useHTMLImport';
 import { Tags } from './Tags';
@@ -57,50 +57,50 @@ export const ObjectList = () => {
   };
 
   return (
-    <div className="p-4 text-white bg-gray-900 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Object List</h1>
+    <div className="object-list">
+      <div className="object-list__container">
+        <h1 className="object-list__title">Object List</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="object-list__actions">
           <div>
-            <h2 className="text-lg font-semibold">Import CSV:</h2>
+            <h2 className="object-list__import-title">Import CSV:</h2>
             <input
               type="file"
               accept=".csv"
               onChange={handleFileUpload}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+              className="object-list__import-input"
             />
           </div>
           <div>
-            <h2 className="text-lg font-semibold">Import HTML:</h2>
+            <h2 className="object-list__import-title">Import HTML:</h2>
             <input
               type="file"
               accept=".html"
               onChange={handleHTMLUpload}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+              className="object-list__import-input"
             />
           </div>
         </div>
 
-        <div className="mb-4 flex items-center gap-4">
-          <h2 className="text-lg font-semibold">Grid Columns:</h2>
-          <div className="flex items-center gap-2">
+        <div className="object-list__grid-control">
+          <h2 className="object-list__grid-control-title">Grid Columns:</h2>
+          <div>
             <input
               type="range"
               min="1"
               max="6"
               value={gridColumns}
               onChange={(e) => setGridColumns(Number(e.target.value))}
-              className="w-32"
+              className="object-list__grid-control-input"
             />
-            <span className="text-sm">{gridColumns}</span>
+            <span className="object-list__grid-control-value">{gridColumns}</span>
           </div>
         </div>
 
         <Tags tags={tags} selectedTags={selectedTags} onTagToggle={toggleTag} />
 
         <div 
-          className="grid gap-4" 
+          className="object-list__grid" 
           style={{ 
             gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))` 
           }}
@@ -108,31 +108,31 @@ export const ObjectList = () => {
           {filteredObjects.map((obj) => (
             <div 
               key={obj.id} 
-              className="bg-gray-800 rounded-lg overflow-hidden hover:ring-2 hover:ring-blue-500 transition-all cursor-pointer"
+              className="object-list__item"
               onClick={() => setSelectedObject(obj)}
             >
               {obj.cover && (
-                <div className="aspect-video">
-                  <img src={obj.cover} alt="" className="w-full h-full single-item-cover-image" />
+                <div className="object-list__item-image-container">
+                  <img src={obj.cover} alt="" className="object-list__item-image" />
                 </div>
               )}
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2 line-clamp-2">{obj.title}</h3>
+              <div className="object-list__item-content">
+                <h3 className="object-list__item-title">{obj.title}</h3>
                 {obj.type === 'video' ? (
-                  <div className="text-blue-400">
-                    <FaYoutube className="inline mr-2" /> Watch Video
+                  <div className="object-list__item-type">
+                    <FaYoutube /> Watch Video
                   </div>
                 ) : (
-                  <div className="text-blue-400">
-                    <FaLink className="inline mr-2" /> Visit Link
+                  <div className="object-list__item-type">
+                    <FaLink /> Visit Link
                   </div>
                 )}
                 {obj.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2">
+                  <div className="object-list__item-tags">
                     {obj.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 bg-gray-700 rounded-full text-xs"
+                        className="object-list__item-tag"
                       >
                         {tag}
                       </span>
@@ -147,15 +147,14 @@ export const ObjectList = () => {
 
       {selectedObject && (
         <Modal onClose={() => setSelectedObject(null)}>
-          <div className="bg-gray-800 rounded-lg overflow-hidden max-w-4xl w-full mx-auto">
-            <div className="p-4">
-              <h2 className="text-xl font-bold mb-4">{selectedObject.title}</h2>
+          <div className="modal__content">
+            <div className="modal__body">
+              <h2 className="modal__title">{selectedObject.title}</h2>
               {selectedObject.type === 'video' ? (
-                <div className="aspect-video mb-4">
+                <div className="modal__video">
                   <iframe
                     src={getEmbedUrl(selectedObject.url)}
                     title={selectedObject.title}
-                    className="w-full h-full"
                     allowFullScreen
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   />
@@ -165,7 +164,7 @@ export const ObjectList = () => {
                   href={selectedObject.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 flex items-center gap-2"
+                  className="modal__link"
                 >
                   <FaLink /> Open in New Tab
                 </a>
