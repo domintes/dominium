@@ -1,9 +1,10 @@
 import { useAtom } from 'jotai';
-import { objectsAtom, tagsAtom } from '../atoms';
+import { objectsAtom, tagsAtom, currentUniverseAtom } from '../atoms';
 
 export const useCSVImport = () => {
   const [, setObjects] = useAtom(objectsAtom);
   const [, setTags] = useAtom(tagsAtom);
+  const [currentUniverse] = useAtom(currentUniverseAtom);
 
   const importCSV = async (file) => {
     const text = await file.text();
@@ -11,13 +12,14 @@ export const useCSVImport = () => {
     const objects = [];
     const tagsSet = new Set();
 
-    rows.forEach((row) => {      if (!row.trim()) return; // Skip empty rows
-      const [id, title, note, excerpt, url, tags, created, cover] = row.split(',').map(val => val?.trim() || '');
+    rows.forEach((row) => {
+      if (!row.trim()) return; // Skip empty rows
+      const [_id, title, note, excerpt, url, tags, created, cover] = row.split(',').map(val => val?.trim() || '');
       const tagList = tags ? tags.split(' ').filter(tag => tag) : [];
       tagList.forEach((tag) => tag && tagsSet.add(tag));
 
       objects.push({
-        id,
+        id: crypto.randomUUID(),
         title,
         note,
         excerpt,
@@ -26,6 +28,7 @@ export const useCSVImport = () => {
         created,
         cover,
         type: url && url.includes('youtube.com') ? 'video' : 'link',
+        universeId: currentUniverse || null // Assign current universe
       });
     });
 

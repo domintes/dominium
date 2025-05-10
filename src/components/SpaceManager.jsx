@@ -19,6 +19,9 @@ export const SpaceManager = () => {
             index === editingUniverse ? newSpaceName : universe
           )
         );
+        if (currentUniverse === universes[editingUniverse]) {
+          setCurrentUniverse(newSpaceName);
+        }
         setEditingUniverse(null);
       } else {
         setUniverses((prev) => [...prev, newSpaceName]);
@@ -35,6 +38,9 @@ export const SpaceManager = () => {
   };
 
   const handleDeleteUniverse = (index) => {
+    if (currentUniverse === universes[index]) {
+      setCurrentUniverse(null);
+    }
     setUniverses((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -45,6 +51,7 @@ export const SpaceManager = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingUniverse(null);
+    setNewSpaceName('');
   };
 
   return (
@@ -68,12 +75,14 @@ export const SpaceManager = () => {
               <button
                 className="space-manager__edit-btn"
                 onClick={() => handleEditUniverse(index)}
+                title="Edit Universe"
               >
                 ✏️
               </button>
               <button
                 className="space-manager__delete-btn"
                 onClick={() => handleDeleteUniverse(index)}
+                title="Delete Universe"
               >
                 🌀
               </button>
@@ -83,21 +92,51 @@ export const SpaceManager = () => {
       </div>
       <button
         className="space-manager__create-btn"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          setNewSpaceName('');
+          setEditingUniverse(null);
+          setIsModalOpen(true);
+        }}
       >
         Create New Universe
       </button>
 
       {isModalOpen && (
         <Modal onClose={closeModal}>
-          <h2>Enter Universe Name</h2>
-          <input
-            type="text"
-            value={newSpaceName}
-            onChange={(e) => setNewSpaceName(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleCreateUniverse()}
-          />
-          <button onClick={handleCreateUniverse}>Create Universe</button>
+          <div className="modal__content">
+            <h2>
+              {editingUniverse !== null
+                ? 'Rename Universe'
+                : 'Create Universe'}
+            </h2>
+            <input
+              type="text"
+              value={newSpaceName}
+              onChange={(e) => setNewSpaceName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleCreateUniverse()}
+              placeholder={
+                editingUniverse !== null
+                  ? 'Enter new name'
+                  : 'Enter universe name'
+              }
+              className="modal__input"
+              autoFocus
+            />
+            <div className="modal__actions">
+              <button
+                onClick={closeModal}
+                className="modal__button modal__button--secondary"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateUniverse}
+                className="modal__button modal__button--primary"
+              >
+                {editingUniverse !== null ? 'Rename' : 'Create'}
+              </button>
+            </div>
+          </div>
         </Modal>
       )}
     </div>
