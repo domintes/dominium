@@ -1,0 +1,57 @@
+/* Import component styles */
+@use './styles/components.scss' as *;
+
+
+/* Base styles */
+:root {
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  line-height: 1.5;
+  font-weight: 400;
+  background-color: #0a0f2c;
+  color: #00f3ff;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0f2c 0%, #1a1f4c 100%);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: #00f3ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: #4dffff;
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+  }
+}
+
+button {
+  background: rgba(0, 243, 255, 0.1);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  color: #00f3ff;
+  padding: 0.6em 1.2em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(0, 243, 255, 0.2);
+    border-color: rgba(0, 243, 255, 0.6);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.5);
+  }
+}
