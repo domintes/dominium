@@ -8,7 +8,7 @@ import { SpaceManager } from './components/SpaceManager';
 function App() {
   const [currentUniverse] = useAtom(currentUniverseAtom);
 
-  const gridClass = currentUniverse ? 'grid--4' : 'grid--1';
+  const gridClass = currentUniverse ? 'grid--1' : 'grid--1';
 
   const centerClass = currentUniverse ? '' : 'center'; // Add center class when no universe is selected
 
